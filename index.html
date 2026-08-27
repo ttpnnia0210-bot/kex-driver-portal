@@ -9,21 +9,23 @@
     <style>body { font-family: 'Prompt', sans-serif; }</style>
 </head>
 <body class="bg-gray-50 text-gray-800">
-    <!-- Navbar -->
-    <nav class="bg-orange-600 text-white shadow-md sticky top-0 z-50">
+    <!-- Navbar (Theme: Red & Yellow KEX Style) -->
+    <nav class="bg-red-600 text-white shadow-md sticky top-0 z-50 border-b-4 border-yellow-400">
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
             <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center p-1 shadow-md border-2 border-amber-400 overflow-hidden">
+                <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center p-1 shadow-md border-2 border-yellow-400 overflow-hidden">
                     <img src="logo.jpg" alt="KEX Logo" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100?text=KEX';">
+                </div>
+                <div>
                     <h1 class="text-lg font-bold tracking-wide">KEX JOB & RATE PORTAL</h1>
-                    <p class="text-xs text-orange-100">ระบบจองรอบวิ่งและตรวจสอบเรทราคา KEX</p>
+                    <p class="text-xs text-yellow-200">ระบบจองรอบวิ่งและตรวจสอบเรทราคา KEX</p>
                 </div>
             </div>
             <div class="flex flex-wrap gap-2">
-                <button onclick="switchTab('jobs')" id="btn-jobs" class="font-medium px-3 py-2 rounded-lg transition text-sm shadow bg-white text-orange-600 font-bold">คลังที่มีโควตาเปิดรับ</button>
-                <button onclick="switchTab('rates-4w')" id="btn-rates-4w" class="font-medium px-3 py-2 rounded-lg hover:bg-orange-700 transition text-sm shadow">เรทราคา 4W</button>
-                <button onclick="switchTab('rates-2w')" id="btn-rates-2w" class="font-medium px-3 py-2 rounded-lg hover:bg-orange-700 transition text-sm shadow">เรทราคา 2W</button>
-                <button onclick="switchTab('apply')" id="btn-apply" class="font-medium px-3 py-2 rounded-lg hover:bg-orange-700 transition text-sm shadow">ฝากประวัติสมัครงาน</button>
+                <button onclick="switchTab('jobs')" id="btn-jobs" class="font-medium px-3 py-2 rounded-lg transition text-sm shadow bg-yellow-400 text-red-900 font-bold">คลังที่มีโควตาเปิดรับ</button>
+                <button onclick="switchTab('rates-4w')" id="btn-rates-4w" class="font-medium px-3 py-2 rounded-lg hover:bg-red-700 transition text-sm shadow">เรทราคา 4W</button>
+                <button onclick="switchTab('rates-2w')" id="btn-rates-2w" class="font-medium px-3 py-2 rounded-lg hover:bg-red-700 transition text-sm shadow">เรทราคา 2W</button>
+                <button onclick="switchTab('apply')" id="btn-apply" class="font-medium px-3 py-2 rounded-lg hover:bg-red-700 transition text-sm shadow">ฝากประวัติสมัครงาน</button>
             </div>
         </div>
     </nav>
@@ -38,7 +40,7 @@
                         <h2 class="text-lg font-bold text-gray-800">📍 รายชื่อคลังสินค้า KEX และโควตาเปิดรับสมัคร</h2>
                         <p class="text-xs text-gray-500">ซิงค์ข้อมูลแบบเรียลไทม์จาก Google Sheets</p>
                     </div>
-                    <input type="text" id="searchInput" onkeyup="filterJobs()" placeholder="🔍 ค้นหาชื่อคลัง หรือ DC Code..." class="px-4 py-2 border rounded-xl text-sm w-full md:w-72 focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                    <input type="text" id="searchInput" onkeyup="filterJobs()" placeholder="🔍 ค้นหาชื่อคลัง หรือ DC Code..." class="px-4 py-2 border rounded-xl text-sm w-full md:w-72 focus:ring-2 focus:ring-red-500 focus:outline-none">
                 </div>
                 <div id="job-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <p class="text-gray-500 text-sm col-span-full text-center py-8">กำลังโหลดข้อมูลจาก Google Sheets...</p>
@@ -48,27 +50,35 @@
 
         <!-- Tab 2: เรทราคา 4W -->
         <section id="tab-rates-4w" class="space-y-4 hidden">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <div class="flex justify-between items-center mb-4">
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 overflow-hidden">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-gradient-to-r from-red-600 to-orange-600 text-white p-5 rounded-2xl mb-6 shadow-md gap-4">
                     <div>
-                        <h2 class="text-lg font-bold text-gray-800">ตารางเรทราคา 4W ประจำสัปดาห์</h2>
-                        <p class="text-xs text-gray-500">Normal (เขียว: 13บ.) | Extra (ส้ม: 17บ.) | Special (แดง: 21บ.)</p>
+                        <h2 class="text-xl font-bold flex items-center gap-2">📊 ตารางเรทราคา 4W ประจำสัปดาห์</h2>
+                        <p class="text-xs text-orange-100 mt-1">ตรวจสอบอัตราค่าบริการและสถานะเรทราคาตามรอบวิ่งรถ 4 ล้อ</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <span class="bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-xl shadow">🟢 Normal = 13 บาท</span>
+                        <span class="bg-yellow-500 text-gray-900 font-bold px-3 py-1.5 rounded-xl shadow">🟡 Extra = 17 บาท</span>
+                        <span class="bg-red-700 text-white font-bold px-3 py-1.5 rounded-xl shadow">🔴 Special = 21 บาท</span>
                     </div>
                 </div>
-                <div id="rates-4w-container" class="overflow-x-auto"><p class="text-gray-500 text-sm">กำลังโหลดข้อมูล...</p></div>
+                <div id="rates-4w-container" class="overflow-x-auto rounded-xl border border-gray-100 shadow-inner p-2 bg-gray-50/50"><p class="text-gray-500 text-sm text-center py-6">กำลังโหลดข้อมูล...</p></div>
             </div>
         </section>
 
         <!-- Tab 3: เรทราคา 2W -->
         <section id="tab-rates-2w" class="space-y-4 hidden">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <div class="flex justify-between items-center mb-4">
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 overflow-hidden">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-5 rounded-2xl mb-6 shadow-md gap-4">
                     <div>
-                        <h2 class="text-lg font-bold text-gray-800">ตารางเรทราคา 2W ประจำสัปดาห์</h2>
-                        <p class="text-xs text-gray-500">อัตราค่าบริการมอเตอร์ไซค์ (8 บาท ทุกวัน)</p>
+                        <h2 class="text-xl font-bold flex items-center gap-2">🛵 ตารางเรทราคา 2W ประจำสัปดาห์</h2>
+                        <p class="text-xs text-blue-100 mt-1">อัตราค่าบริการมอเตอร์ไซค์เหมาจ่ายคุ้มค่า</p>
+                    </div>
+                    <div class="text-xs">
+                        <span class="bg-white text-blue-800 font-extrabold px-4 py-2 rounded-xl shadow text-sm">🛵 เรทราคาพิเศษ: 8 บาท ทุกวัน</span>
                     </div>
                 </div>
-                <div id="rates-2w-container" class="overflow-x-auto"><p class="text-gray-500 text-sm">กำลังโหลดข้อมูล...</p></div>
+                <div id="rates-2w-container" class="overflow-x-auto rounded-xl border border-gray-100 shadow-inner p-2 bg-gray-50/50"><p class="text-gray-500 text-sm text-center py-6">กำลังโหลดข้อมูล...</p></div>
             </div>
         </section>
 
@@ -82,21 +92,21 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1">ชื่อ - นามสกุล (ภาษาไทย) *</label>
-                            <input type="text" id="apply-name" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                            <input type="text" id="apply-name" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-red-500 focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1">เบอร์โทรศัพท์ *</label>
-                            <input type="tel" id="apply-phone" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                            <input type="tel" id="apply-phone" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-red-500 focus:outline-none">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1">ID Line</label>
-                            <input type="text" id="apply-line" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                            <input type="text" id="apply-line" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-red-500 focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1">ประเภทรถที่ใช้งาน *</label>
-                            <select id="apply-vehicle" required class="w-full px-3 py-2 border rounded-xl text-sm bg-white focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                            <select id="apply-vehicle" required class="w-full px-3 py-2 border rounded-xl text-sm bg-white focus:ring-2 focus:ring-red-500 focus:outline-none">
                                 <option value="">-- เลือกประเภทรถ --</option>
                                 <option value="รถ 4 ล้อ (4W)">รถ 4 ล้อ (4W)</option>
                                 <option value="มอเตอร์ไซค์ (2W)">มอเตอร์ไซค์ (2W)</option>
@@ -104,20 +114,20 @@
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1">ทะเบียนรถ</label>
-                            <input type="text" id="apply-plate" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                            <input type="text" id="apply-plate" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-red-500 focus:outline-none">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1">พื้นที่ที่สะดวกวิ่ง</label>
-                            <input type="text" id="apply-area" placeholder="เช่น สาทร, บางนา" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                            <input type="text" id="apply-area" placeholder="เช่น สาทร, บางนา" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-red-500 focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1">วันที่พร้อมเริ่มงาน</label>
-                            <input type="date" id="apply-date" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                            <input type="date" id="apply-date" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-red-500 focus:outline-none">
                         </div>
                     </div>
-                    <button type="submit" id="btn-submit-apply" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl text-sm transition shadow-md">
+                    <button type="submit" id="btn-submit-apply" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl text-sm transition shadow-md border-b-2 border-yellow-400">
                         ฝากประวัติสมัครงาน
                     </button>
                 </form>
@@ -132,10 +142,10 @@
         function switchTab(tabId) {
             ['jobs', 'rates-4w', 'rates-2w', 'apply'].forEach(t => {
                 document.getElementById('tab-' + t).classList.add('hidden');
-                document.getElementById('btn-' + t).className = 'font-medium px-3 py-2 rounded-lg hover:bg-orange-700 transition text-sm shadow';
+                document.getElementById('btn-' + t).className = 'font-medium px-3 py-2 rounded-lg hover:bg-red-700 transition text-sm shadow';
             });
             document.getElementById('tab-' + tabId).classList.remove('hidden');
-            document.getElementById('btn-' + tabId).className = 'font-medium px-3 py-2 rounded-lg transition text-sm shadow bg-white text-orange-600 font-bold';
+            document.getElementById('btn-' + tabId).className = 'font-medium px-3 py-2 rounded-lg transition text-sm shadow bg-yellow-400 text-red-900 font-bold';
         }
 
         function loadSheetData() {
@@ -165,7 +175,7 @@
                     <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex flex-col justify-between shadow-sm hover:shadow-md transition">
                         <div>
                             <div class="flex justify-between items-start mb-2">
-                                <span class="bg-orange-100 text-orange-800 text-xs font-bold px-2.5 py-1 rounded-lg">${dc}</span>
+                                <span class="bg-red-100 text-red-800 text-xs font-bold px-2.5 py-1 rounded-lg">${dc}</span>
                                 <div class="flex gap-2 text-xs font-semibold">
                                     <span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded">📦 4W: ${w4}</span>
                                     <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">🛵 2W: ${w2}</span>
@@ -175,8 +185,8 @@
                             <p class="text-xs text-gray-600 mb-3 line-clamp-2">ที่อยู่: ${address}</p>
                         </div>
                         <div>
-                            ${map.startsWith('http') ? `<a href="${map}" target="_blank" class="text-xs text-orange-600 font-medium hover:underline inline-block mb-3">📍 เปิดดูแผนที่ Google Maps</a>` : ''}
-                            <button onclick="bookJob('${name}')" class="w-full bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold py-2 rounded-xl transition shadow">
+                            ${map.startsWith('http') ? `<a href="${map}" target="_blank" class="text-xs text-red-600 font-medium hover:underline inline-block mb-3">📍 เปิดดูแผนที่ Google Maps</a>` : ''}
+                            <button onclick="bookJob('${name}')" class="w-full bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2 rounded-xl transition shadow">
                                 จองรอบวิ่ง KEX คลังนี้
                             </button>
                         </div>
@@ -197,69 +207,71 @@
         }
 
         function renderRatesTables(data) {
-            const allowedHeaders = ['DC Code', 'ชื่อคลัง', 'โลเคชั่น', 'Google Maps Link', '4W', '2W', 'โควตา'];
+            const hiddenHeaders = ['DC Code', 'ชื่อคลัง', 'โลเคชั่น', 'Google Maps Link', '4W', '2W', 'โควตา'];
             let dateHeaders = [];
             
             if (data.length > 0) {
                 const firstRowKeys = Object.keys(data[0]);
-                dateHeaders = firstRowKeys.filter(k => !allowedHeaders.includes(k) && k.trim() !== '');
+                dateHeaders = firstRowKeys.filter(k => !hiddenHeaders.includes(k) && k.trim() !== '');
             }
 
-            // --- ตาราง 4W ---
-            let html4w = '<table class="w-full text-left border-collapse text-xs"><tr class="bg-orange-50 text-orange-700 border-b">';
-            html4w += '<th class="p-2 border-r">DC Code</th>';
-            html4w += '<th class="p-2 border-r">ชื่อคลัง</th>';
+            // --- ตาราง 4W (Stunning Design) ---
+            let html4w = '<table class="w-full text-left border-collapse bg-white rounded-xl shadow-sm overflow-hidden text-xs"><tr class="bg-gradient-to-r from-red-700 to-orange-600 text-white uppercase text-[11px] tracking-wider">';
+            html4w += '<th class="p-3.5 border-r border-red-500/30">DC Code</th>';
+            html4w += '<th class="p-3.5 border-r border-red-500/30">ชื่อคลัง</th>';
             dateHeaders.forEach(h => {
                 let cleanDate = h.split(' 00:00:00')[0].replace(' GMT+0700 (เวลาอินโดจีน)', '').trim();
-                html4w += `<th class="p-2 text-center border-r">${cleanDate}</th>`;
+                html4w += `<th class="p-3.5 text-center border-r border-red-500/30">${cleanDate}</th>`;
             });
             html4w += '</tr>';
 
-            data.forEach(row => {
-                html4w += '<tr class="border-b hover:bg-gray-50">';
-                html4w += `<td class="p-2 border-r font-bold">${row['DC Code'] || ''}</td>`;
-                html4w += `<td class="p-2 border-r font-medium">${row['ชื่อคลัง'] || ''}</td>`;
+            data.forEach((row, index) => {
+                let rowBg = index % 2 === 0 ? 'bg-white' : 'bg-gray-50/80';
+                html4w += `<tr class="${rowBg} hover:bg-orange-50/50 transition border-b border-gray-100">`;
+                html4w += `<td class="p-3.5 border-r border-gray-100 font-bold text-red-600">${row['DC Code'] || ''}</td>`;
+                html4w += `<td class="p-3.5 border-r border-gray-100 font-semibold text-gray-800">${row['ชื่อคลัง'] || ''}</td>`;
 
                 dateHeaders.forEach(h => {
                     let val = row[h] ? String(row[h]).trim() : '';
-                    let badgeClass = 'text-gray-600 bg-gray-100';
+                    let badgeClass = 'text-gray-500 bg-gray-100';
                     let displayText = val;
 
                     if (val.toLowerCase() === 'normal') {
-                        badgeClass = 'bg-green-100 text-green-800 font-bold';
+                        badgeClass = 'bg-emerald-100 text-emerald-800 font-bold border border-emerald-200';
                         displayText = 'Normal (13บ.)';
                     } else if (val.toLowerCase() === 'extra') {
-                        badgeClass = 'bg-orange-100 text-orange-800 font-bold';
+                        badgeClass = 'bg-amber-100 text-amber-800 font-bold border border-amber-200';
                         displayText = 'Extra (17บ.)';
                     } else if (val.toLowerCase() === 'special') {
-                        badgeClass = 'bg-red-100 text-red-800 font-bold';
+                        badgeClass = 'bg-red-100 text-red-800 font-bold border border-red-200';
                         displayText = 'Special (21บ.)';
                     }
 
-                    html4w += `<td class="p-2 text-center border-r"><span class="px-2 py-1 rounded-md text-[11px] inline-block ${badgeClass}">${displayText}</span></td>`;
+                    html4w += `<td class="p-3.5 text-center border-r border-gray-100"><span class="px-2.5 py-1.5 rounded-lg text-[11px] inline-block shadow-sm ${badgeClass}">${displayText}</span></td>`;
                 });
                 html4w += '</tr>';
             });
             html4w += '</table>';
             document.getElementById('rates-4w-container').innerHTML = html4w;
 
-            // --- ตาราง 2W (ราคา 8 บาททุกวัน) ---
-            let html2w = '<table class="w-full text-left border-collapse text-xs"><tr class="bg-orange-50 text-orange-700 border-b">';
-            html2w += '<th class="p-2 border-r">DC Code</th>';
-            html2w += '<th class="p-2 border-r">ชื่อคลัง</th>';
+            // --- ตาราง 2W (Stunning Design) ---
+            let html2w = '<table class="w-full text-left border-collapse bg-white rounded-xl shadow-sm overflow-hidden text-xs"><tr class="bg-gradient-to-r from-blue-700 to-indigo-600 text-white uppercase text-[11px] tracking-wider">';
+            html2w += '<th class="p-3.5 border-r border-blue-500/30">DC Code</th>';
+            html2w += '<th class="p-3.5 border-r border-blue-500/30">ชื่อคลัง</th>';
             dateHeaders.forEach(h => {
                 let cleanDate = h.split(' 00:00:00')[0].replace(' GMT+0700 (เวลาอินโดจีน)', '').trim();
-                html2w += `<th class="p-2 text-center border-r">${cleanDate}</th>`;
+                html2w += `<th class="p-3.5 text-center border-r border-blue-500/30">${cleanDate}</th>`;
             });
             html2w += '</tr>';
 
-            data.forEach(row => {
-                html2w += '<tr class="border-b hover:bg-gray-50">';
-                html2w += `<td class="p-2 border-r font-bold">${row['DC Code'] || ''}</td>`;
-                html2w += `<td class="p-2 border-r font-medium">${row['ชื่อคลัง'] || ''}</td>`;
+            data.forEach((row, index) => {
+                let rowBg = index % 2 === 0 ? 'bg-white' : 'bg-gray-50/80';
+                html2w += `<tr class="${rowBg} hover:bg-blue-50/50 transition border-b border-gray-100">`;
+                html2w += `<td class="p-3.5 border-r border-gray-100 font-bold text-blue-600">${row['DC Code'] || ''}</td>`;
+                html2w += `<td class="p-3.5 border-r border-gray-100 font-semibold text-gray-800">${row['ชื่อคลัง'] || ''}</td>`;
 
                 dateHeaders.forEach(h => {
-                    html2w += `<td class="p-2 text-center border-r"><span class="px-2 py-1 rounded-md text-[11px] inline-block bg-blue-50 text-blue-800 font-bold">8 บาท</span></td>`;
+                    html2w += `<td class="p-3.5 text-center border-r border-gray-100"><span class="px-2.5 py-1.5 rounded-lg text-[11px] inline-block bg-blue-50 text-blue-800 font-bold border border-blue-200 shadow-sm">8 บาท</span></td>`;
                 });
                 html2w += '</tr>';
             });
