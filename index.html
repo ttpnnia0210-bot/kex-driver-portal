@@ -51,8 +51,12 @@
         <!-- Tab 2: เรทราคา 4W -->
         <section id="tab-rates-4w" class="space-y-4 hidden">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h2 class="text-lg font-bold text-gray-800 mb-1">ตารางเรทราคา 4W ประจำสัปดาห์</h2>
-                <p class="text-xs text-gray-500 mb-4">ตรวจสอบเรทราคาและสถานะการวิ่งรถ 4 ล้อ</p>
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-gray-800">ตารางเรทราคา 4W ประจำสัปดาห์</h2>
+                        <p class="text-xs text-gray-500">Normal (เขียว: 13บ.) | Extra (ส้ม: 17บ.) | Special (แดง: 21บ.)</p>
+                    </div>
+                </div>
                 <div id="rates-4w-container" class="overflow-x-auto"><p class="text-gray-500 text-sm">กำลังโหลดข้อมูล...</p></div>
             </div>
         </section>
@@ -60,8 +64,12 @@
         <!-- Tab 3: เรทราคา 2W -->
         <section id="tab-rates-2w" class="space-y-4 hidden">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h2 class="text-lg font-bold text-gray-800 mb-1">ตารางเรทราคา 2W ประจำสัปดาห์</h2>
-                <p class="text-xs text-gray-500 mb-4">ตรวจสอบเรทราคาและสถานะการวิ่งมอเตอร์ไซค์</p>
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-gray-800">ตารางเรทราคา 2W ประจำสัปดาห์</h2>
+                        <p class="text-xs text-gray-500">อัตราค่าบริการมอเตอร์ไซค์ (8 บาท ทุกวัน)</p>
+                    </div>
+                </div>
                 <div id="rates-2w-container" class="overflow-x-auto"><p class="text-gray-500 text-sm">กำลังโหลดข้อมูล...</p></div>
             </div>
         </section>
@@ -136,10 +144,12 @@
             fetch(SCRIPT_URL)
                 .then(res => res.json())
                 .then(data => {
-                    if(!data || data.length === 0) return;
-                    allJobData = data;
-                    renderJobs(data);
-                    renderRatesTable(data);
+                    // กรองเฉพาะแถวที่มีข้อมูล DC Code หรือ ชื่อคลังจริง (ข้ามแถวสรุปด้านล่าง)
+                    const validData = data.filter(row => row['DC Code'] && row['DC Code'].toString().trim() !== '' && row['DC Code'] !== '35');
+                    if(!validData || validData.length === 0) return;
+                    allJobData = validData;
+                    renderJobs(validData);
+                    renderRatesTables(validData);
                 })
                 .catch(err => console.error(err));
         }
@@ -189,25 +199,75 @@
             renderJobs(filtered);
         }
 
-        function renderRatesTable(data) {
-            let html = '<table class="w-full text-left border-collapse text-xs"><tr class="bg-orange-50 text-orange-700 border-b">';
-            const headers = Object.keys(data[0]);
-            headers.forEach(h => html += `<th class="p-2">${h}</th>`);
-            html += '</tr>';
-            data.forEach(row => {
-                html += '<tr class="border-b hover:bg-gray-50">';
-                headers.forEach(h => {
-                    let val = row[h] !== undefined ? row[h] : '';
-                    if(String(val).startsWith('http')) {
-                        val = `<a href="${val}" target="_blank" class="text-orange-600 underline">Maps</a>`;
-                    }
-                    html += `<td class="p-2">${val}</td>`;
-                });
-                html += '</tr>';
+        function renderRatesTables(data) {
+            const allowedHeaders = ['DC Code', 'ชื่อคลัง', '4W', '2W', 'โควตา'];
+            let dateHeaders = [];
+            
+            if (data.length > 0) {
+                const firstRowKeys = Object.keys(data[0]);
+                dateHeaders = firstRowKeys.filter(k => !allowedHeaders.includes(k) && k.trim() !== '');
+            }
+
+            // --- ตาราง 4W ---
+            let html4w = '<table class="w-full text-left border-collapse text-xs"><tr class="bg-orange-50 text-orange-700 border-b">';
+            html4w += '<th class="p-2 border-r">DC Code</th>';
+            html4w += '<th class="p-2 border-r">ชื่อคลัง</th>';
+            dateHeaders.forEach(h => {
+                let cleanDate = h.split(' 00:00:00')[0].replace(' GMT+0700 (เวลาอินโดจีน)', '').trim();
+                html4w += `<th class="p-2 text-center border-r">${cleanDate}</th>`;
             });
-            html += '</table>';
-            document.getElementById('rates-4w-container').innerHTML = html;
-            document.getElementById('rates-2w-container').innerHTML = html;
+            html4w += '</tr>';
+
+            data.forEach(row => {
+                html4w += '<tr class="border-b hover:bg-gray-50">';
+                html4w += `<td class="p-2 border-r font-bold">${row['DC Code'] || ''}</td>`;
+                html4w += `<td class="p-2 border-r font-medium">${row['ชื่อคลัง'] || ''}</td>`;
+
+                dateHeaders.forEach(h => {
+                    let val = row[h] ? String(row[h]).trim() : '';
+                    let badgeClass = 'text-gray-600 bg-gray-100';
+                    let displayText = val;
+
+                    if (val.toLowerCase() === 'normal') {
+                        badgeClass = 'bg-green-100 text-green-800 font-bold';
+                        displayText = 'Normal (13บ.)';
+                    } else if (val.toLowerCase() === 'extra') {
+                        badgeClass = 'bg-orange-100 text-orange-800 font-bold';
+                        displayText = 'Extra (17บ.)';
+                    } else if (val.toLowerCase() === 'special') {
+                        badgeClass = 'bg-red-100 text-red-800 font-bold';
+                        displayText = 'Special (21บ.)';
+                    }
+
+                    html4w += `<td class="p-2 text-center border-r"><span class="px-2 py-1 rounded-md text-[11px] inline-block ${badgeClass}">${displayText}</span></td>`;
+                });
+                html4w += '</tr>';
+            });
+            html4w += '</table>';
+            document.getElementById('rates-4w-container').innerHTML = html4w;
+
+            // --- ตาราง 2W (ราคา 8 บาททุกวัน) ---
+            let html2w = '<table class="w-full text-left border-collapse text-xs"><tr class="bg-orange-50 text-orange-700 border-b">';
+            html2w += '<th class="p-2 border-r">DC Code</th>';
+            html2w += '<th class="p-2 border-r">ชื่อคลัง</th>';
+            dateHeaders.forEach(h => {
+                let cleanDate = h.split(' 00:00:00')[0].replace(' GMT+0700 (เวลาอินโดจีน)', '').trim();
+                html2w += `<th class="p-2 text-center border-r">${cleanDate}</th>`;
+            });
+            html2w += '</tr>';
+
+            data.forEach(row => {
+                html2w += '<tr class="border-b hover:bg-gray-50">';
+                html2w += `<td class="p-2 border-r font-bold">${row['DC Code'] || ''}</td>`;
+                html2w += `<td class="p-2 border-r font-medium">${row['ชื่อคลัง'] || ''}</td>`;
+
+                dateHeaders.forEach(h => {
+                    html2w += `<td class="p-2 text-center border-r"><span class="px-2 py-1 rounded-md text-[11px] inline-block bg-blue-50 text-blue-800 font-bold">8 บาท</span></td>`;
+                });
+                html2w += '</tr>';
+            });
+            html2w += '</table>';
+            document.getElementById('rates-2w-container').innerHTML = html2w;
         }
 
         function bookJob(warehouseName) {
