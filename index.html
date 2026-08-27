@@ -4,466 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KEX Driver Job & Rate Portal</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Prompt', sans-serif; }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Sarabun', sans-serif; }</style>
 </head>
-<body class="bg-gray-50 text-gray-800">
-
-    <!-- Navbar โทนสีแดง-เหลืองสไตล์ KEX พร้อมโลโก้ -->
-    <nav class="bg-red-600 text-white shadow-md sticky top-0 z-50 border-b-4 border-amber-400">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
+<body class="bg-gray-50 min-h-screen">
+    <header class="bg-orange-600 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center p-1 shadow-md border-2 border-amber-400 overflow-hidden">
-                    <img src="ใส่ลิงก์รูปโลโก้ของคุณตรงนี้" alt="KEX Logo" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=KEX';">
+                <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center overflow-hidden p-1">
+                    <img src="logo.jpg" alt="KEX Logo" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=KEX';">
                 </div>
                 <div>
-                    <h1 class="text-lg font-bold tracking-wide">KEX JOB & RATE PORTAL</h1>
-                    <p class="text-xs text-amber-200">ระบบจองรอบวิ่งและตรวจสอบเรทราคา KEX</p>
+                    <h1 class="text-lg font-bold leading-tight">KEX JOB & RATE PORTAL</h1>
+                    <p class="text-xs text-orange-100">ระบบจองรอบวิ่งและตรวจสอบเรทราคา KEX</p>
                 </div>
-            </div>
-            <div class="flex flex-wrap gap-2">
-                <button onclick="switchTab('jobs')" id="btn-jobs" class="font-medium px-3 py-2 rounded-lg bg-amber-400 text-red-950 font-bold transition text-sm shadow">คลังที่มีโควตาเปิดรับ</button>
-                <button onclick="switchTab('rates-4w')" id="btn-rates-4w" class="font-medium px-3 py-2 rounded-lg hover:bg-red-700 transition text-sm">เรทราคา 4W</button>
-                <button onclick="switchTab('rates-2w')" id="btn-rates-2w" class="font-medium px-3 py-2 rounded-lg hover:bg-red-700 transition text-sm">เรทราคา 2W</button>
-                <button onclick="switchTab('apply')" id="btn-apply" class="font-medium px-3 py-2 rounded-lg hover:bg-red-700 transition text-sm">ฝากประวัติสมัครงาน</button>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 py-8">
-
-        <!-- Tab 1: รายการคลังที่มีโควต้าแยก 4W / 2W -->
-        <section id="section-jobs" class="space-y-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border-l-8 border-red-600">
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-900">รายชื่อคลังสินค้า KEX และโควตาเปิดรับ</h2>
-                    <p class="text-sm text-gray-500">ซิงค์ข้อมูลแบบเรียลไทม์จาก Google Sheets</p>
+    <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div class="max-w-2xl mx-auto">
+                <div class="text-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">ลงทะเบียนจองรอบวิ่ง / ฝากประวัติสมัครงาน</h2>
+                    <p class="text-sm text-gray-500 mt-1">กรอกข้อมูลให้ครบถ้วนเพื่อให้เจ้าหน้าที่ติดต่อกลับ</p>
                 </div>
-                <div class="w-full md:w-80">
-                    <input type="text" id="search-box" onkeyup="filterJobs()" placeholder="🔍 ค้นหาชื่อคลัง หรือ DC Code..." class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none text-sm bg-gray-50">
-                </div>
-            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="job-list">
-                <div class="col-span-full text-center py-10 text-gray-500">กำลังโหลดข้อมูลคลัง KEX...</div>
-            </div>
-        </section>
-
-        <!-- Tab 2: ตารางเรทราคา 4W -->
-        <section id="section-rates-4w" class="space-y-6 hidden">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border-l-8 border-amber-400">
-                <h2 class="text-2xl font-bold text-gray-900">ตารางเรทราคา 4W ประจำสัปดาห์ (24 ส.ค. - 30 ส.ค. 2026)</h2>
-                <p class="text-sm text-gray-500">เรทราคา 4 ล้อ: Normal (13฿) / Extra (17฿) / Special (21฿)</p>
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
-                <table class="w-full text-left border-collapse text-sm">
-                    <thead>
-                        <tr class="bg-red-600 text-white border-b">
-                            <th class="p-3">DC Code</th>
-                            <th class="p-3">พื้นที่ / คลัง</th>
-                            <th class="p-3 text-center">จ 24/8</th>
-                            <th class="p-3 text-center">อ 25/8</th>
-                            <th class="p-3 text-center">พ 26/8</th>
-                            <th class="p-3 text-center">พฤ 27/8</th>
-                            <th class="p-3 text-center">ศ 28/8</th>
-                            <th class="p-3 text-center">ส 29/8</th>
-                            <th class="p-3 text-center">อา 30/8</th>
-                        </tr>
-                    </thead>
-                    <tbody id="rate-table-body-4w" class="divide-y divide-gray-100">
-                        <!-- โหลดข้อมูลอัตโนมัติ -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- Tab 3: ตารางเรทราคา 2W -->
-        <section id="section-rates-2w" class="space-y-6 hidden">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border-l-8 border-amber-400">
-                <h2 class="text-2xl font-bold text-gray-900">ตารางเรทราคา 2W ประจำสัปดาห์ (24 ส.ค. - 30 ส.ค. 2026)</h2>
-                <p class="text-sm text-gray-500">เรทราคามอเตอร์ไซค์ (2W): เหมาจ่าย 8 บาททุกวัน ทุกคลัง</p>
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
-                <table class="w-full text-left border-collapse text-sm">
-                    <thead>
-                        <tr class="bg-red-600 text-white border-b">
-                            <th class="p-3">DC Code</th>
-                            <th class="p-3">พื้นที่ / คลัง</th>
-                            <th class="p-3 text-center">จ 24/8</th>
-                            <th class="p-3 text-center">อ 25/8</th>
-                            <th class="p-3 text-center">พ 26/8</th>
-                            <th class="p-3 text-center">พฤ 27/8</th>
-                            <th class="p-3 text-center">ศ 28/8</th>
-                            <th class="p-3 text-center">ส 29/8</th>
-                            <th class="p-3 text-center">อา 30/8</th>
-                        </tr>
-                    </thead>
-                    <tbody id="rate-table-body-2w" class="divide-y divide-gray-100">
-                        <!-- โหลดข้อมูลอัตโนมัติ -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- Tab 4: ฟอร์มฝากประวัติสมัครงาน -->
-        <section id="section-apply" class="hidden max-w-2xl mx-auto bg-white rounded-2xl shadow-md border-t-8 border-red-600 p-8">
-            <div class="text-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-900">ฝากประวัติสมัครงาน</h2>
-                <p class="text-sm text-gray-500">ฝากประวัติของคุณไว้เพื่อให้เจ้าหน้าที่ติดต่อกลับทันทีเมื่อมีโควตาว่าง (กรุณากรอกชื่อ-นามสกุลเป็นภาษาไทย)</p>
-            </div>
-
-            <form onsubmit="handleApply(event)" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อ - นามสกุล (ภาษาไทย)</label>
-                    <input type="text" id="apply-name" required class="w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none" placeholder="เช่น สมชาย ใจดี">
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรศัพท์</label>
-                        <input type="tel" id="apply-phone" required class="w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none" placeholder="0812345678">
+                <form id="driverForm" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อ - นามสกุล *</label>
+                            <input type="text" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรศัพท์ *</label>
+                            <input type="tel" name="phone" required class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">ID Line</label>
-                        <input type="text" id="apply-line" required class="w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none" placeholder="ไอดีไลน์ของคุณ">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทรถ *</label>
+                            <select name="carType" required class="w-full px-4 py-2 border border-gray-300 rounded-xl bg-white focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                                <option value="">-- กรุณาเลือกประเภทรถ --</option>
+                                <option value="4W">รถ 4 ล้อ (4W)</option>
+                                <option value="2W">มอเตอร์ไซค์ (2W)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">รายละเอียด / พื้นที่ / วันที่เริ่มงาน *</label>
+                            <input type="text" name="note" placeholder="เช่น สาทร / พร้อมเริ่ม 2026-08-31" required class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                        </div>
                     </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทรถที่ใช้งาน</label>
-                        <select id="apply-vehicle" class="w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none bg-white">
-                            <option value="4W">รถ 4 ล้อ (4W)</option>
-                            <option value="2W">มอเตอร์ไซค์ (2W)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">ทะเบียนรถ</label>
-                        <input type="text" id="apply-plate" required class="w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none" placeholder="เช่น 1กก-1234 กทม.">
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">พื้นที่ที่สะดวกวิ่ง</label>
-                        <input type="text" id="apply-area" required class="w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none" placeholder="เช่น ดินแดง, ห้วยขวาง">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">วันที่พร้อมเริ่มงาน</label>
-                        <input type="date" id="apply-date" required class="w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none bg-white">
-                    </div>
-                </div>
-                <button type="submit" id="btn-submit-apply" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl transition shadow-md mt-4">
-                    ฝากประวัติสมัครงาน
-                </button>
-            </form>
+
+                    <button type="submit" id="submitBtn" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition shadow-md">
+                        ยืนยันการสมัคร / ส่งข้อมูล
+                    </button>
+                </form>
+
+                <div id="responseMessage" class="hidden mt-4 p-4 text-center rounded-xl text-sm font-medium"></div>
+            </div>
         </section>
     </main>
 
-    <!-- Modal สำหรับกรอกข้อมูลยืนยันการจองงาน -->
-    <div id="booking-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border-t-8 border-amber-400">
-            <h3 class="text-xl font-bold text-gray-900 mb-1" id="modal-title">จองรอบวิ่ง</h3>
-            <p class="text-sm text-gray-500 mb-4">กรุณากรอกข้อมูลส่วนตัว (ชื่อ-นามสกุลภาษาไทย) เพื่อยืนยันการจอง</p>
-            <form onsubmit="submitBooking(event)" class="space-y-3">
-                <div>
-                    <label class="block text-xs font-medium text-gray-700 mb-1">ชื่อ - นามสกุล (ภาษาไทย)</label>
-                    <input type="text" id="book-name" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="สมชาย ใจดี">
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-700 mb-1">เบอร์โทรศัพท์</label>
-                        <input type="tel" id="book-phone" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="0812345678">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-700 mb-1">ID Line</label>
-                        <input type="text" id="book-line" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="ไอดีไลน์">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-700 mb-1">ประเภทรถ</label>
-                        <select id="book-vehicle" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 bg-white">
-                            <option value="4W">รถ 4 ล้อ (4W)</option>
-                            <option value="2W">มอเตอร์ไซค์ (2W)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-700 mb-1">ทะเบียนรถ</label>
-                        <input type="text" id="book-plate" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="1กก-1234">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-700 mb-1">วันที่พร้อมเริ่มงาน</label>
-                    <input type="date" id="book-date" required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 bg-white">
-                </div>
-                <div class="flex space-x-2 mt-5">
-                    <button type="button" onclick="closeModal()" class="w-1/2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 rounded-lg text-sm transition">ยกเลิก</button>
-                    <button type="submit" id="btn-submit-book" class="w-1/2 bg-red-600 hover:bg-red-700 text-white font-medium py-2 rounded-lg text-sm transition">ยืนยันการจอง</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- JavaScript เชื่อมต่อ Google Apps Script และตรวจสอบภาษาไทย -->
     <script>
-        let database = [];
-        let selectedBranch = '';
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4Ni39-nv03p_NFTjXbDnYr2mXKOZ7I_J8X6swmq6PqQ1Pw47VJP0Wx9m9hWd9D_ou-g/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby9NvHS4uAPWKzF9WPgmcdtPKzkmUQbJZ9PzksBPmHgTMLJmJuO1ppEq68CqD6wwjXVYg/exec';
 
-        // ฟังก์ชันตรวจสอบว่าเป็นภาษาไทยหรือไม่
-        function isThaiLanguage(text) {
-            const thaiPattern = /^[ก-๙\s\.]+$/;
-            return thaiPattern.test(text);
-        }
+        const form = document.getElementById('driverForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const responseMessage = document.getElementById('responseMessage');
 
-        async function loadSheetData() {
-            try {
-                const response = await fetch(SCRIPT_URL);
-                const rows = await response.json();
-                
-                database = [];
-                for (let i = 1; i < rows.length; i++) {
-                    const cols = rows[i];
-                    if (cols.length >= 14 && cols[0] !== "") {
-                        database.push({
-                            code: cols[0] || '',
-                            name: cols[1] || '',
-                            detail: cols[2] || '',
-                            map: cols[3] || '',
-                            quota4W: cols[4] || '0',
-                            quota2W: cols[5] || '0',
-                            quotaTotal: cols[6] || '0',
-                            rates: [cols[7] || 'Normal', cols[8] || 'Normal', cols[9] || 'Normal', cols[10] || 'Normal', cols[11] || 'Normal', cols[12] || 'Normal', cols[13] || 'Normal']
-                        });
-                    }
-                }
-                renderJobs(database);
-                renderRates4W(database);
-                renderRates2W(database);
-            } catch (error) {
-                console.error("Error loading data:", error);
-                document.getElementById('job-list').innerHTML = `<div class="col-span-full text-center text-red-500 py-10 bg-white rounded-xl shadow">ไม่สามารถดึงข้อมูลจาก Google Apps Script ได้ กรุณาตรวจสอบลิงก์ Web App อีกครั้ง</div>`;
-            }
-        }
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'กำลังส่งข้อมูล...';
 
-        function renderJobs(data) {
-            const container = document.getElementById('job-list');
-            container.innerHTML = '';
-            if (data.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center text-gray-500 py-10 bg-white rounded-xl shadow">ไม่พบข้อมูลคลังสินค้า KEX</div>`;
-                return;
-            }
-            data.forEach((item) => {
-                const card = document.createElement('div');
-                card.className = "bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between hover:shadow-md transition border-t-4 border-amber-400";
-                card.innerHTML = `
-                    <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="bg-red-100 text-red-800 text-xs font-bold px-2.5 py-1 rounded-lg">${item.code}</span>
-                            <div class="space-x-1">
-                                <span class="bg-amber-100 text-amber-900 text-xs font-bold px-2 py-0.5 rounded">🚛 4W: ${item.quota4W}</span>
-                                <span class="bg-red-50 text-red-800 text-xs font-bold px-2 py-0.5 rounded">🏍️ 2W: ${item.quota2W}</span>
-                            </div>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-800 mt-2">${item.name}</h3>
-                        <p class="text-sm text-gray-600 mt-1"><strong>ที่อยู่:</strong> ${item.detail}</p>
-                        <a href="${item.map}" target="_blank" class="inline-block text-xs text-red-600 font-semibold hover:underline mt-3">📌 เปิดดูแผนที่ Google Maps</a>
-                    </div>
-                    <button onclick="openBookingModal('${item.name} (${item.code})')" class="mt-6 w-full bg-amber-400 hover:bg-amber-500 text-red-950 font-bold py-2.5 rounded-xl transition text-sm shadow-sm">
-                        จองรอบวิ่ง KEX คลังนี้
-                    </button>
-                `;
-                container.appendChild(card);
-            });
-        }
+            const formData = new FormData(form);
 
-        function renderRates4W(data) {
-            const tbody = document.getElementById('rate-table-body-4w');
-            tbody.innerHTML = '';
-            data.forEach(item => {
-                const row = document.createElement('tr');
-                row.className = "hover:bg-gray-50 transition";
-                let cells = `<td class="p-3 font-semibold text-red-600">${item.code}</td><td class="p-3">${item.name}</td>`;
-                item.rates.forEach(rate => {
-                    let badgeColor = "bg-gray-100 text-gray-700";
-                    let labelText = rate;
-                    const rLower = rate.toLowerCase();
-
-                    if (rLower.includes('normal')) {
-                        badgeColor = "bg-green-100 text-green-700 font-medium";
-                        labelText = "Normal (13฿)";
-                    } else if (rLower.includes('extra')) {
-                        badgeColor = "bg-orange-100 text-orange-700 font-medium";
-                        labelText = "Extra (17฿)";
-                    } else if (rLower.includes('special')) {
-                        badgeColor = "bg-pink-100 text-pink-700 font-bold";
-                        labelText = "Special (21฿)";
-                    }
-
-                    cells += `<td class="p-3 text-center"><span class="px-2.5 py-1 rounded-lg text-xs ${badgeColor}">${labelText}</span></td>`;
+            fetch(SCRIPT_URL, { method: 'POST', body: formData })
+                .then(response => {
+                    responseMessage.textContent = 'บันทึกข้อมูลสำเร็จเรียบร้อยแล้ว!';
+                    responseMessage.className = 'mt-4 p-4 text-center rounded-xl text-sm font-medium bg-green-100 text-green-700';
+                    form.reset();
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'ยืนยันการสมัคร / ส่งข้อมูล';
+                })
+                .catch(error => {
+                    responseMessage.textContent = 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง';
+                    responseMessage.className = 'mt-4 p-4 text-center rounded-xl text-sm font-medium bg-red-100 text-red-700';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'ยืนยันการสมัคร / ส่งข้อมูล';
                 });
-                row.innerHTML = cells;
-                tbody.appendChild(row);
-            });
-        }
-
-        function renderRates2W(data) {
-            const tbody = document.getElementById('rate-table-body-2w');
-            tbody.innerHTML = '';
-            data.forEach(item => {
-                const row = document.createElement('tr');
-                row.className = "hover:bg-gray-50 transition";
-                let cells = `<td class="p-3 font-semibold text-red-600">${item.code}</td><td class="p-3">${item.name}</td>`;
-                // เรทราคา 2W 8 บาททุกวัน
-                for (let i = 0; i < 7; i++) {
-                    cells += `<td class="p-3 text-center"><span class="px-2.5 py-1 rounded-lg text-xs bg-blue-100 text-blue-800 font-medium">8฿</span></td>`;
-                }
-                row.innerHTML = cells;
-                tbody.appendChild(row);
-            });
-        }
-
-        function filterJobs() {
-            const keyword = document.getElementById('search-box').value.toLowerCase();
-            const filtered = database.filter(item => 
-                item.name.toLowerCase().includes(keyword) || 
-                item.detail.toLowerCase().includes(keyword) || 
-                item.code.toLowerCase().includes(keyword)
-            );
-            renderJobs(filtered);
-        }
-
-        function switchTab(tab) {
-            document.getElementById('section-jobs').classList.add('hidden');
-            document.getElementById('section-rates-4w').classList.add('hidden');
-            document.getElementById('section-rates-2w').classList.add('hidden');
-            document.getElementById('section-apply').classList.add('hidden');
-            
-            document.getElementById('btn-jobs').className = "font-medium px-3 py-2 rounded-lg hover:bg-red-700 transition text-sm";
-            document.getElementById('btn-rates-4w').className = "font-medium px-3 py-2 rounded-lg hover:bg-red-700 transition text-sm";
-            document.getElementById('btn-rates-2w').className = "font-medium px-3 py-2 rounded-lg hover:bg-red-700 transition text-sm";
-            document.getElementById('btn-apply').className = "font-medium px-3 py-2 rounded-lg hover:bg-red-700 transition text-sm";
-
-            if (tab === 'jobs') {
-                document.getElementById('section-jobs').classList.remove('hidden');
-                document.getElementById('btn-jobs').className = "font-medium px-3 py-2 rounded-lg bg-amber-400 text-red-950 font-bold transition text-sm shadow";
-            } else if (tab === 'rates-4w') {
-                document.getElementById('section-rates-4w').classList.remove('hidden');
-                document.getElementById('btn-rates-4w').className = "font-medium px-3 py-2 rounded-lg bg-amber-400 text-red-950 font-bold transition text-sm shadow";
-            } else if (tab === 'rates-2w') {
-                document.getElementById('section-rates-2w').classList.remove('hidden');
-                document.getElementById('btn-rates-2w').className = "font-medium px-3 py-2 rounded-lg bg-amber-400 text-red-950 font-bold transition text-sm shadow";
-            } else {
-                document.getElementById('section-apply').classList.remove('hidden');
-                document.getElementById('btn-apply').className = "font-medium px-3 py-2 rounded-lg bg-amber-400 text-red-950 font-bold transition text-sm shadow";
-            }
-        }
-
-        function openBookingModal(branchName) {
-            selectedBranch = branchName;
-            document.getElementById('modal-title').innerText = `จองรอบวิ่ง: ${branchName}`;
-            document.getElementById('booking-modal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('booking-modal').classList.add('hidden');
-        }
-
-        async function submitBooking(event) {
-            event.preventDefault();
-            const fullName = document.getElementById('book-name').value;
-
-            if (!isThaiLanguage(fullName)) {
-                alert('กรุณากรอกชื่อ - นามสกุล เป็นภาษาไทยเท่านั้น');
-                return;
-            }
-
-            const btn = document.getElementById('btn-submit-book');
-            btn.innerText = 'กำลังบันทึกข้อมูล...';
-            btn.disabled = true;
-
-            const workDate = document.getElementById('book-date').value;
-
-            const payload = {
-                type: 'จองรอบวิ่ง',
-                fullname: fullName,
-                phone: document.getElementById('book-phone').value,
-                lineId: document.getElementById('book-line').value,
-                vehicle: document.getElementById('book-vehicle').value,
-                licensePlate: document.getElementById('book-plate').value,
-                detail: `${selectedBranch} | พร้อมเริ่ม: ${workDate}`
-            };
-
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                alert(`จองรอบวิ่ง "${selectedBranch}" สำเร็จ!\nข้อมูลถูกบันทึกเข้าสู่ระบบ Google Sheets เรียบร้อยแล้ว`);
-                closeModal();
-                event.target.reset();
-            } catch (error) {
-                alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่อีกครั้ง');
-            } finally {
-                btn.innerText = 'ยืนยันการจอง';
-                btn.disabled = false;
-            }
-        }
-
-        async function handleApply(event) {
-            event.preventDefault();
-            const fullName = document.getElementById('apply-name').value;
-
-            if (!isThaiLanguage(fullName)) {
-                alert('กรุณากรอกชื่อ - นามสกุล เป็นภาษาไทยเท่านั้น');
-                return;
-            }
-
-            const btn = document.getElementById('btn-submit-apply');
-            btn.innerText = 'กำลังบันทึกประวัติ...';
-            btn.disabled = true;
-
-            const preferredArea = document.getElementById('apply-area').value;
-            const workDate = document.getElementById('apply-date').value;
-
-            const payload = {
-                type: 'ฝากประวัติสมัครงาน',
-                fullname: fullName,
-                phone: document.getElementById('apply-phone').value,
-                lineId: document.getElementById('apply-line').value,
-                vehicle: document.getElementById('apply-vehicle').value,
-                licensePlate: document.getElementById('apply-plate').value,
-                detail: `พื้นที่สะดวกวิ่ง: ${preferredArea} | พร้อมเริ่ม: ${workDate}`
-            };
-
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                alert('ฝากประวัติสมัครงานเรียบร้อยแล้ว!\nระบบได้บันทึกข้อมูลของท่านไว้เพื่อติดต่อกลับเมื่อมีโควตาว่าง');
-                event.target.reset();
-                switchTab('jobs');
-            } catch (error) {
-                alert('เกิดข้อผิดพลาดในการฝากประวัติ กรุณาลองใหม่อีกครั้ง');
-            } finally {
-                btn.innerText = 'ฝากประวัติสมัครงาน';
-                btn.disabled = false;
-            }
-        }
-
-        loadSheetData();
+        });
     </script>
 </body>
 </html>
