@@ -5,98 +5,236 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KEX Driver Job & Rate Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Sarabun', sans-serif; }</style>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Prompt', sans-serif; }</style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <header class="bg-orange-600 text-white shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+<body class="bg-gray-50 text-gray-800">
+    <!-- Navbar โทน KEX -->
+    <nav class="bg-orange-600 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center overflow-hidden p-1">
+                <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center p-1 shadow-md border-2 border-amber-400 overflow-hidden">
                     <img src="logo.jpg" alt="KEX Logo" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=KEX';">
                 </div>
                 <div>
-                    <h1 class="text-lg font-bold leading-tight">KEX JOB & RATE PORTAL</h1>
+                    <h1 class="text-lg font-bold tracking-wide">KEX JOB & RATE PORTAL</h1>
                     <p class="text-xs text-orange-100">ระบบจองรอบวิ่งและตรวจสอบเรทราคา KEX</p>
                 </div>
             </div>
+            <!-- เมนูสลับหน้าเว็บ -->
+            <div class="flex flex-wrap gap-2">
+                <button onclick="switchTab('jobs')" id="btn-jobs" class="font-medium px-3 py-2 rounded-lg transition text-sm shadow bg-white text-orange-600 font-bold">คลังที่มีโควตาเปิดรับ</button>
+                <button onclick="switchTab('rates-4w')" id="btn-rates-4w" class="font-medium px-3 py-2 rounded-lg hover:bg-orange-700 transition text-sm shadow">เรทราคา 4W</button>
+                <button onclick="switchTab('rates-2w')" id="btn-rates-2w" class="font-medium px-3 py-2 rounded-lg hover:bg-orange-700 transition text-sm shadow">เรทราคา 2W</button>
+                <button onclick="switchTab('apply')" id="btn-apply" class="font-medium px-3 py-2 rounded-lg hover:bg-orange-700 transition text-sm shadow">ฝากประวัติสมัครงาน</button>
+            </div>
         </div>
-    </header>
+    </nav>
 
-    <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
-        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <div class="max-w-2xl mx-auto">
-                <div class="text-center mb-6">
-                    <h2 class="text-xl font-bold text-gray-800">ลงทะเบียนจองรอบวิ่ง / ฝากประวัติสมัครงาน</h2>
-                    <p class="text-sm text-gray-500 mt-1">กรอกข้อมูลให้ครบถ้วนเพื่อให้เจ้าหน้าที่ติดต่อกลับ</p>
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 py-6">
+        
+        <!-- Tab 1: คลังที่มีโควตาเปิดรับ -->
+        <section id="tab-jobs" class="space-y-4">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h2 class="text-lg font-bold text-gray-800 mb-4">📍 รายชื่อคลังสินค้า KEX และโควตาเปิดรับสมัคร</h2>
+                <div id="sheet-data-container" class="overflow-x-auto">
+                    <p class="text-gray-500 text-sm">กำลังโหลดข้อมูลจาก Google Sheets...</p>
                 </div>
+            </div>
+        </section>
 
-                <form id="driverForm" class="space-y-4">
+        <!-- Tab 2: เรทราคา 4W -->
+        <section id="tab-rates-4w" class="space-y-4 hidden">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h2 class="text-lg font-bold text-gray-800 mb-2">ตารางเรทราคา 4W ประจำสัปดาห์</h2>
+                <p class="text-sm text-gray-500 mb-4">เรทราคาคลังสินค้า KEX และโควตาเปิดรับ (Normal 13฿ / Extra 15฿)</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-orange-50 text-orange-700 text-sm border-b">
+                                <th class="p-3">DC Code</th>
+                                <th class="p-3">พื้นที่ / คลัง</th>
+                                <th class="p-3 text-center">จ 24/8</th>
+                                <th class="p-3 text-center">อ 25/8</th>
+                                <th class="p-3 text-center">พ 26/8</th>
+                                <th class="p-3 text-center">พฤ 27/8</th>
+                                <th class="p-3 text-center">ศ 28/8</th>
+                                <th class="p-3 text-center">ส 29/8</th>
+                                <th class="p-3 text-center">อา 30/8</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm divide-y">
+                            <tr><td class="p-3 font-medium">BK01</td><td class="p-3">บางนา / คลังสินค้าหลัก</td><td class="p-3 text-center text-green-600 font-bold">✓</td><td class="p-3 text-center text-green-600 font-bold">✓</td><td class="p-3 text-center text-red-500 font-bold">-</td><td class="p-3 text-center text-green-600 font-bold">✓</td><td class="p-3 text-center text-green-600 font-bold">✓</td><td class="p-3 text-center text-red-500 font-bold">-</td><td class="p-3 text-center text-green-600 font-bold">✓</td></tr>
+                            <tr><td class="p-3 font-medium">CC02</td><td class="p-3">จตุจักร / Hub กลาง</td><td class="p-3 text-center text-green-600 font-bold">✓</td><td class="p-3 text-center text-green-600 font-bold">✓</td><td class="p-3 text-center text-green-600 font-bold">✓</td><td class="p-3 text-center text-red-500 font-bold">-</td><td class="p-3 text-center text-green-600 font-bold">✓</td><td class="p-3 text-center text-green-600 font-bold">✓</td><td class="p-3 text-center text-red-500 font-bold">-</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 3: เรทราคา 2W -->
+        <section id="tab-rates-2w" class="space-y-4 hidden">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h2 class="text-lg font-bold text-gray-800 mb-2">ตารางเรทราคา 2W ประจำสัปดาห์</h2>
+                <p class="text-sm text-gray-500 mb-4">เรทราคามอเตอร์ไซค์ (2W): เหมาจ่าย 8 บาททุกวัน ทุกคลัง</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-orange-50 text-orange-700 text-sm border-b">
+                                <th class="p-3">DC Code</th>
+                                <th class="p-3">พื้นที่ / คลัง</th>
+                                <th class="p-3 text-center">จ 24/8</th>
+                                <th class="p-3 text-center">อ 25/8</th>
+                                <th class="p-3 text-center">พ 26/8</th>
+                                <th class="p-3 text-center">พฤ 27/8</th>
+                                <th class="p-3 text-center">ศ 28/8</th>
+                                <th class="p-3 text-center">ส 29/8</th>
+                                <th class="p-3 text-center">อา 30/8</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm divide-y">
+                            <tr><td class="p-3 font-medium">DC2W-01</td><td class="p-3">โซนสุขุมวิท / สีลม</td><td class="p-3 text-center text-green-600 font-bold">✓</td><td class="p-3 text-center text-green-600 font-bold">✓</td><td class="p-3 text-center text-green-600 font-bold">✓</td><td class="p-3 text-center text-green-600 font-bold">✓</td><td class="p-3 text-center text-green-600 font-bold">✓</td><td class="p-3 text-center text-green-600 font-bold">✓</td><td class="p-3 text-center text-green-600 font-bold">✓</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 4: ฝากประวัติสมัครงาน -->
+        <section id="tab-apply" class="space-y-4 hidden">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 max-w-2xl mx-auto">
+                <h2 class="text-lg font-bold text-gray-800 text-center mb-1">ฝากประวัติสมัครงาน / จองรอบวิ่ง</h2>
+                <p class="text-xs text-gray-500 text-center mb-6">กรอกข้อมูลส่วนตัวเพื่อให้เจ้าหน้าที่ติดต่อกลับทันทีที่มีโควตาว่าง</p>
+                
+                <form id="applyForm" class="space-y-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อ - นามสกุล *</label>
-                            <input type="text" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">ชื่อ - นามสกุล (ภาษาไทย) *</label>
+                            <input type="text" id="apply-name" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรศัพท์ *</label>
-                            <input type="tel" name="phone" required class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">เบอร์โทรศัพท์ *</label>
+                            <input type="tel" id="apply-phone" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none">
                         </div>
                     </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทรถ *</label>
-                            <select name="carType" required class="w-full px-4 py-2 border border-gray-300 rounded-xl bg-white focus:ring-2 focus:ring-orange-500 focus:outline-none">
-                                <option value="">-- กรุณาเลือกประเภทรถ --</option>
-                                <option value="4W">รถ 4 ล้อ (4W)</option>
-                                <option value="2W">มอเตอร์ไซค์ (2W)</option>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">ID Line</label>
+                            <input type="text" id="apply-line" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">ประเภทรถที่ใช้งาน *</label>
+                            <select id="apply-vehicle" required class="w-full px-3 py-2 border rounded-xl text-sm bg-white focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                                <option value="">-- เลือกประเภทรถ --</option>
+                                <option value="รถ 4 ล้อ (4W)">รถ 4 ล้อ (4W)</option>
+                                <option value="มอเตอร์ไซค์ (2W)">มอเตอร์ไซค์ (2W)</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">รายละเอียด / พื้นที่ / วันที่เริ่มงาน *</label>
-                            <input type="text" name="note" placeholder="เช่น สาทร / พร้อมเริ่ม 2026-08-31" required class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">ทะเบียนรถ</label>
+                            <input type="text" id="apply-plate" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none">
                         </div>
                     </div>
-
-                    <button type="submit" id="submitBtn" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition shadow-md">
-                        ยืนยันการสมัคร / ส่งข้อมูล
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">พื้นที่ที่สะดวกวิ่ง</label>
+                            <input type="text" id="apply-area" placeholder="เช่น สาทร, บางนา" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">วันที่พร้อมเริ่มงาน</label>
+                            <input type="date" id="apply-date" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                        </div>
+                    </div>
+                    <button type="submit" id="btn-submit-apply" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl text-sm transition shadow-md">
+                        ฝากประวัติสมัครงาน
                     </button>
                 </form>
-
-                <div id="responseMessage" class="hidden mt-4 p-4 text-center rounded-xl text-sm font-medium"></div>
             </div>
         </section>
+
     </main>
 
     <script>
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby9NvHS4uAPWKzF9WPgmcdtPKzkmUQbJZ9PzksBPmHgTMLJmJuO1ppEq68CqD6wwjXVYg/exec';
 
-        const form = document.getElementById('driverForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const responseMessage = document.getElementById('responseMessage');
+        // ฟังก์ชันสลับแท็บเมนู
+        function switchTab(tabId) {
+            ['jobs', 'rates-4w', 'rates-2w', 'apply'].forEach(t => {
+                document.getElementById('tab-' + t).classList.add('hidden');
+                const btn = document.getElementById('btn-' + t);
+                btn.className = 'font-medium px-3 py-2 rounded-lg hover:bg-orange-700 transition text-sm shadow';
+            });
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            document.getElementById('btn-' + tabId).className = 'font-medium px-3 py-2 rounded-lg transition text-sm shadow bg-white text-orange-600 font-bold';
+        }
 
-        form.addEventListener('submit', e => {
-            e.preventDefault();
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'กำลังส่งข้อมูล...';
-
-            const formData = new FormData(form);
-
-            fetch(SCRIPT_URL, { method: 'POST', body: formData })
-                .then(response => {
-                    responseMessage.textContent = 'บันทึกข้อมูลสำเร็จเรียบร้อยแล้ว!';
-                    responseMessage.className = 'mt-4 p-4 text-center rounded-xl text-sm font-medium bg-green-100 text-green-700';
-                    form.reset();
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'ยืนยันการสมัคร / ส่งข้อมูล';
+        // โหลดข้อมูลจาก Google Sheets มาแสดงหน้าแรก
+        function loadSheetData() {
+            fetch(SCRIPT_URL)
+                .then(res => res.json())
+                .then(data => {
+                    if(!data || data.length === 0) {
+                        document.getElementById('sheet-data-container').innerHTML = '<p class="text-gray-500 text-sm">ไม่พบข้อมูลในระบบ</p>';
+                        return;
+                    }
+                    let html = '<table class="w-full text-left border-collapse"><tr class="bg-orange-50 text-orange-700 text-sm border-b">';
+                    Object.keys(data[0]).forEach(key => {
+                        html += `<th class="p-3">${key}</th>`;
+                    });
+                    html += '</tr>';
+                    data.forEach(row => {
+                        html += '<tr class="border-b text-sm hover:bg-gray-50">';
+                        Object.values(row).forEach(val => {
+                            html += `<td class="p-3">${val}</td>`;
+                        });
+                        html += '</tr>';
+                    });
+                    html += '</table>';
+                    document.getElementById('sheet-data-container').innerHTML = html;
                 })
-                .catch(error => {
-                    responseMessage.textContent = 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง';
-                    responseMessage.className = 'mt-4 p-4 text-center rounded-xl text-sm font-medium bg-red-100 text-red-700';
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'ยืนยันการสมัคร / ส่งข้อมูล';
+                .catch(err => {
+                    document.getElementById('sheet-data-container').innerHTML = '<p class="text-red-500 text-sm">ไม่สามารถโหลดข้อมูลจาก Google Sheets ได้ในขณะนี้</p>';
                 });
+        }
+
+        // ส่งข้อมูลสมัครงานเข้า Google Sheets
+        document.getElementById('applyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit-apply');
+            btn.innerText = 'กำลังบันทึกประวัติ...';
+            btn.disabled = true;
+
+            const payload = {
+                type: 'ฝากประวัติสมัครงาน',
+                fullname: document.getElementById('apply-name').value,
+                phone: document.getElementById('apply-phone').value,
+                lineId: document.getElementById('apply-line').value,
+                vehicle: document.getElementById('apply-vehicle').value,
+                licensePlate: document.getElementById('apply-plate').value,
+                detail: `พื้นที่สะดวก: ${document.getElementById('apply-area').value} | พร้อมเริ่ม: ${document.getElementById('apply-date').value}`
+            };
+
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                alert('ฝากประวัติสมัครงานเรียบร้อยแล้ว! ระบบได้บันทึกข้อมูลของท่านไว้เพื่อติดต่อกลับเมื่อมีโควตาว่าง');
+                e.target.reset();
+                switchTab('jobs');
+            } catch (error) {
+                alert('เกิดข้อผิดพลาดในการฝากประวัติ กรุณาลองใหม่อีกครั้ง');
+            } finally {
+                btn.innerText = 'ฝากประวัติสมัครงาน';
+                btn.disabled = false;
+            }
         });
+
+        // โหลดข้อมูลทันทีเมื่อเปิดเว็บ
+        loadSheetData();
     </script>
 </body>
 </html>
