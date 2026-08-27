@@ -14,9 +14,7 @@
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
             <div class="flex items-center space-x-3">
                 <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center p-1 shadow-md border-2 border-amber-400 overflow-hidden">
-                    <img src="logo.jpg" alt="KEX Logo" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=KEX';">
-                </div>
-                <div>
+                    <img src="logo.jpg" alt="KEX Logo" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100?text=KEX';">
                     <h1 class="text-lg font-bold tracking-wide">KEX JOB & RATE PORTAL</h1>
                     <p class="text-xs text-orange-100">ระบบจองรอบวิ่งและตรวจสอบเรทราคา KEX</p>
                 </div>
@@ -144,7 +142,6 @@
             fetch(SCRIPT_URL)
                 .then(res => res.json())
                 .then(data => {
-                    // กรองเฉพาะแถวที่มีข้อมูล DC Code หรือ ชื่อคลังจริง (ข้ามแถวสรุปด้านล่าง)
                     const validData = data.filter(row => row['DC Code'] && row['DC Code'].toString().trim() !== '' && row['DC Code'] !== '35');
                     if(!validData || validData.length === 0) return;
                     allJobData = validData;
@@ -200,7 +197,7 @@
         }
 
         function renderRatesTables(data) {
-            const allowedHeaders = ['DC Code', 'ชื่อคลัง', '4W', '2W', 'โควตา'];
+            const allowedHeaders = ['DC Code', 'ชื่อคลัง', 'โลเคชั่น', 'Google Maps Link', '4W', '2W', 'โควตา'];
             let dateHeaders = [];
             
             if (data.length > 0) {
